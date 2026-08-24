@@ -14,6 +14,10 @@ NOTE: This project was generated with [Cookiecutter](https://github.com/audreyr/
 ![SeedDots Logo Light][seeddots-logo-light]
 ![SeedDots Logo Dark][seeddots-logo-dark]
 
+SeedDots provides a deterministic, reversible way to encode BIP39 seed phrases into compact dot‑patterns suitable for metal stamping, engraving, or visual backup.
+
+Unlike QR codes or random patterns, SeedDots produces human‑verifiable, symbol‑agnostic, space‑efficient encodings that can be reconstructed even from partial damage.
+
 SeedDots converts each word of a BIP39 mnemonic into a compact, 3‑column dotmap.
 It’s a human‑portable obfuscation layer designed for secure backups, metal plates, and offline storage systems like OneKey stamping plates.
 
@@ -21,13 +25,14 @@ The dotmap is fully reversible, deterministic, and symbol‑set agnostic.
 
 ## ✨ Features
 
-- 🔐 **Encode** BIP39 seed phrases into dotmaps  
-- 🔄 **Decode** dotmaps back into valid BIP39 words  
-- 🧩 **Verification** to detect corruption or transcription errors  
+- 🔐 **Encode BIP39 seed phrases** into deterministic dotmaps  
+- 🔄 **Decode dotmaps** back into seed phrases  
+- 🧩 **Verification** of encoded/decoded output  
 - 🖨️ **Printable stamping cards** (Markdown, PNG, or SVG)  
-- 🧱 Multiple symbol sets: dot, ascii, block, rune  
-- 📋 Clipboard support for fast workflows  
-- 🧪 Clean, modular architecture (`encoder.py`, `utils.py`, `dotmap.py`)
+- 🧱 **Multiple symbol sets**: dot, ascii, block, rune  
+- 📋 **Clipboard support** for fast workflows  
+- 🧪 **Clean, modular architecture** (`encoder.py`, `utils.py`, `dotmap.py`)
+- 🔒 **Zero external dependencies** for encoding/decoding
 
 ## 📦 Installation
 
@@ -71,6 +76,20 @@ pip install -e .
 
 ```zsh
 seeddots --help
+Usage: seeddots [OPTIONS] COMMAND [ARGS]...
+
+  SeedDots — Encode and decode BIP39 seed phrases into dotmaps.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  decode      Decode a dotmap back into a mnemonic phrase.
+  encode      Encode a mnemonic phrase into a dotmap.
+  logo        Print or save the SeedDots logo.
+  preview     Preview the dotmap for a single word.
+  printcard   Generate a printable stamping card for OneKey plates.
+  symbol-key  Show symbol set mappings.
 ```
 
 ### Encode a seed phrase
