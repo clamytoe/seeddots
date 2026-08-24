@@ -1,0 +1,13 @@
+name: seeddots
+channels:
+  - conda-forge
+dependencies:
+  - black
+  - cairosvg
+  - isort
+  - mypy
+  - pyperclip
+  - pytest
+  - pytest-cov
+  - python=3.13
+  - rich

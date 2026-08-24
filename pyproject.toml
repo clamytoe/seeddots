@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seeddots"
+version = "0.1.0"
+description = "Deterministic dot-pattern encoding for seed phrases."
+authors = [{ name = "Martin Uribe" }]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+
+[project.scripts]
+seeddots = "seeddots.dotmap:cli"
+
+[tool.setuptools.packages.find]
+include = ["seeddots"]
+exclude = ["tests", "examples", "images"]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
