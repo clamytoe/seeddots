@@ -39,22 +39,22 @@ import pyperclip
 # }
 LOGO_MATRIX = {
     "dark": [
-        [1,1,1,1,1,1,1,1,1],
-        [1,1,0,0,1,0,0,1,1],
-        [1,0,1,1,1,0,1,0,1],
-        [1,1,0,0,1,0,1,0,1],
-        [1,1,1,0,1,0,1,0,1],
-        [1,0,0,1,1,0,0,1,1],
-        [1,1,1,1,1,1,1,1,1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 1, 0, 0, 1, 1],
+        [1, 0, 1, 1, 1, 0, 1, 0, 1],
+        [1, 1, 0, 0, 1, 0, 1, 0, 1],
+        [1, 1, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 0, 1, 1, 0, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ],
     "light": [
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,1,1,0,1,1,0,0],
-        [0,1,0,0,0,1,0,1,0],
-        [0,0,1,1,0,1,0,1,0],
-        [0,0,0,1,0,1,0,1,0],
-        [0,1,1,0,0,1,1,1,0],
-        [0,0,0,0,0,0,0,0,0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 0, 1, 1, 0, 0],
+        [0, 1, 0, 0, 0, 1, 0, 1, 0],
+        [0, 0, 1, 1, 0, 1, 0, 1, 0],
+        [0, 0, 0, 1, 0, 1, 0, 1, 0],
+        [0, 1, 1, 0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
 }
 
@@ -62,6 +62,7 @@ LOGO_MATRIX = {
 # ---------------------------------------------------------------------------
 # Wordlist loading
 # ---------------------------------------------------------------------------
+
 
 def load_wordlist(path: str = "bip39_english.txt") -> List[str]:
     """
@@ -72,8 +73,21 @@ def load_wordlist(path: str = "bip39_english.txt") -> List[str]:
 
 
 # ---------------------------------------------------------------------------
+# Normalization
+# ---------------------------------------------------------------------------
+
+
+def normalize_encoded(text: str) -> str:
+    """
+    Normalize encoded text to only include 0 and 1.
+    """
+    return "".join(ch for ch in text if ch in "01")
+
+
+# ---------------------------------------------------------------------------
 # File parsing
 # ---------------------------------------------------------------------------
+
 
 def parse_pass_phrase_file(file_path: str) -> Optional[str]:
     """
@@ -107,6 +121,7 @@ def parse_dot_file(file_path: str) -> Optional[List[str]]:
 # Phrase resolution
 # ---------------------------------------------------------------------------
 
+
 def resolve_phrase_input(
     file: Optional[str],
     from_clipboard: bool,
@@ -135,6 +150,7 @@ def resolve_phrase_input(
 # Verification
 # ---------------------------------------------------------------------------
 
+
 def verify_phrase(
     decoded_words: List[str],
     input_lines: List[str],
@@ -161,6 +177,8 @@ def verify_phrase(
 
     mismatches = []
     for i, (orig, recon) in enumerate(zip(input_lines, reencoded_lines)):
+        orig = normalize_encoded(orig)
+        recon = normalize_encoded(recon)
         if orig.strip() != recon.strip():
             mismatches.append((i + 1, decoded_words[i], orig, recon))
 
@@ -173,6 +191,7 @@ def verify_phrase(
 # ---------------------------------------------------------------------------
 # Printable card generation
 # ---------------------------------------------------------------------------
+
 
 def generate_markdown_card(entries: List[Tuple[int, str, int, str]]) -> str:
     """
@@ -232,8 +251,8 @@ def logo_gen(style: str = "dark") -> str:
 
 def save_logo_png(style: str, output: str, size: int = 64) -> None:
     """Render the logo as a PNG with transparent background.
-       1 = filled circle + outline
-       0 = outline only (transparent fill)
+    1 = filled circle + outline
+    0 = outline only (transparent fill)
     """
     rows = LOGO_MATRIX[style]
     dot = size
