@@ -28,6 +28,7 @@ from seeddots.utils import (
     load_wordlist,
     logo_gen,
     save_logo_png,
+    normalize_encoded,
     resolve_phrase_input,
     parse_dot_file,
     generate_markdown_card,
@@ -42,6 +43,7 @@ console = Console()
 # CLI group
 # ---------------------------------------------------------------------------
 
+
 @click.group()
 def cli():
     """SeedDots — Encode and decode BIP39 seed phrases into dotmaps."""
@@ -51,6 +53,7 @@ def cli():
 # ---------------------------------------------------------------------------
 # Encode command
 # ---------------------------------------------------------------------------
+
 
 @cli.command()
 @click.argument("phrase", required=False)
@@ -70,7 +73,9 @@ def cli():
     type=click.Choice(list(SYMBOL_SETS.keys())),
     help="Symbol set for console preview",
 )
-def encode(phrase, file, from_clipboard, copy_output, wordlist, symbol_set, preview_symbols):
+def encode(
+    phrase, file, from_clipboard, copy_output, wordlist, symbol_set, preview_symbols
+):
     """Encode a mnemonic phrase into a dotmap."""
     wl = load_wordlist(wordlist)
     phrase = resolve_phrase_input(file, from_clipboard, phrase)
@@ -97,6 +102,10 @@ def encode(phrase, file, from_clipboard, copy_output, wordlist, symbol_set, prev
             index = wl.index(word) + 1
 
             table.add_row(str(index), word, col1_prev, col2_prev, col3_prev)
+            col1_out = normalize_encoded(col1_out)
+            col2_out = normalize_encoded(col2_out)
+            col3_out = normalize_encoded(col3_out)
+            print(f"{col1_out} {col2_out} {col3_out}")
             encoded_lines.append(f"{col1_out} {col2_out} {col3_out}")
 
         except ValueError:
@@ -112,6 +121,7 @@ def encode(phrase, file, from_clipboard, copy_output, wordlist, symbol_set, prev
 # ---------------------------------------------------------------------------
 # Decode command
 # ---------------------------------------------------------------------------
+
 
 @cli.command()
 @click.option("--file", type=click.Path(exists=True), help="Path to dotmap file")
@@ -163,7 +173,11 @@ def decode(file, from_clipboard, copy_output, wordlist, symbol_set, preview_symb
 
     for line in lines:
         try:
-            col1, col2, col3 = line.split("  ")
+            if "  " in line:  # Support previously formatted dotmaps with double spaces
+                col1, col2, col3 = line.split("  ")
+                col1, col2, col3 = col1.strip(), col2.strip(), col3.strip()
+            else:
+                col1, col2, col3 = line.split()
 
             word = decode_columns(col1, col2, col3, wl, symbol_set)
             decoded_words.append(word)
@@ -172,7 +186,9 @@ def decode(file, from_clipboard, copy_output, wordlist, symbol_set, preview_symb
             binary = index_to_binary(wl.index(word) + 1)
             col1_prev, col2_prev, col3_prev = binary_to_dotmap(binary, preview_symbols)
 
-            table.add_row(str(wl.index(word) + 1), word, col1_prev, col2_prev, col3_prev)
+            table.add_row(
+                str(wl.index(word) + 1), word, col1_prev, col2_prev, col3_prev
+            )
 
         except Exception as e:
             console.print(f"[red]Invalid input:[/red] {e}")
@@ -194,12 +210,14 @@ def decode(file, from_clipboard, copy_output, wordlist, symbol_set, preview_symb
     )
 
     if verified:
-        console.print("[bold green]✅ Phrase verified: no corruption detected.[/bold green]")
+        console.print(
+            "[bold green]✅ Phrase verified: no corruption detected.[/bold green]"
+        )
     else:
         console.print("[bold red]⚠️ Verification failed.[/bold red]")
 
         assert info is not None  # type narrowing for VSCode/mypy
-        
+
         for i, word, orig, recon in info:
             console.print(f"[yellow]Line {i}:[/yellow] {word}")
             console.print(f"  Original: {orig}")
@@ -209,6 +227,7 @@ def decode(file, from_clipboard, copy_output, wordlist, symbol_set, preview_symb
 # ---------------------------------------------------------------------------
 # Preview command
 # ---------------------------------------------------------------------------
+
 
 @cli.command()
 @click.argument("word")
@@ -231,6 +250,7 @@ def preview(word, symbol_set):
 # ---------------------------------------------------------------------------
 # Printcard command
 # ---------------------------------------------------------------------------
+
 
 @cli.command()
 @click.argument("phrase", required=False)
@@ -296,6 +316,7 @@ def printcard(phrase, file, wordlist, format, output):
 # Symbol key
 # ---------------------------------------------------------------------------
 
+
 @cli.command()
 def symbol_key():
     """Show symbol set mappings."""
@@ -306,6 +327,7 @@ def symbol_key():
 # ---------------------------------------------------------------------------
 # Print logo
 # ---------------------------------------------------------------------------
+
 
 @cli.command()
 @click.option("--style", default="dark", type=click.Choice(["dark", "light"]))
