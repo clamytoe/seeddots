@@ -229,12 +229,13 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 
 ## Changelog
 
+- **v0.1.1** Normalized output for saving to file.
 - **v0.1.0** Initial commit.
 
 [seeddots-logo-light]: images/logo-light.png#gh-light-mode-only
 [seeddots-logo-dark]: images/logo-dark.png#gh-dark-mode-only
 [python-version]:https://img.shields.io/badge/python-3.13.3-brightgreen.svg
-[latest-version]:https://img.shields.io/badge/version-0.1.0-blue.svg
+[latest-version]:https://img.shields.io/badge/version-0.1.1-blue.svg
 [issues-image]:https://img.shields.io/github/issues/clamytoe/seeddots.svg
 [issues-url]:https://github.com/clamytoe/seeddots/issues
 [fork-image]:https://img.shields.io/github/forks/clamytoe/seeddots.svg
