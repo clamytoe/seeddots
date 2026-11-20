@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from typing import List, Tuple, Optional
 from importlib.resources import files
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 
 import pyperclip
 
