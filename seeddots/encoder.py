@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import List, Tuple
 
-
 # ---------------------------------------------------------------------------
 # Symbol sets (1-bit, 0-bit)
 # ---------------------------------------------------------------------------
@@ -33,8 +32,9 @@ SYMBOL_SETS = {
 # Core binary helpers
 # ---------------------------------------------------------------------------
 
+
 def index_to_binary(index: int) -> str:
-    """Convert a BIP39 index (1–2048) into a 12-bit binary string."""
+    """Convert a BIP39 index (1-2048) into a 12-bit binary string."""
     return format(index, "012b")
 
 
@@ -56,7 +56,7 @@ def dotmap_to_binary(col1: str, col2: str, col3: str, symbol_set: str = "dot") -
     """
     Convert 3 dotmap columns back into a 12-bit binary string.
     """
-    one, zero = SYMBOL_SETS.get(symbol_set, SYMBOL_SETS["dot"])
+    one, _ = SYMBOL_SETS.get(symbol_set, SYMBOL_SETS["dot"])
     code = col1 + " " + col2 + " " + col3
     binary = "".join("1" if c == one.strip() else "0" for c in (code.replace(" ", "")))
     return binary
@@ -66,6 +66,7 @@ def dotmap_to_binary(col1: str, col2: str, col3: str, symbol_set: str = "dot") -
 # Word-level helpers
 # ---------------------------------------------------------------------------
 
+
 def word_to_binary(word: str, wordlist: List[str]) -> str:
     """
     Convert a BIP39 word into its 12-bit binary representation.
@@ -74,7 +75,9 @@ def word_to_binary(word: str, wordlist: List[str]) -> str:
     return index_to_binary(index)
 
 
-def encode_word(word: str, wordlist: List[str], symbol_set: str) -> Tuple[str, str, str]:
+def encode_word(
+    word: str, wordlist: List[str], symbol_set: str
+) -> Tuple[str, str, str]:
     """
     Encode a single BIP39 word into a 3-column dotmap tuple.
     """
@@ -98,7 +101,10 @@ def decode_columns(
 # Optional: preview helper (pure logic)
 # ---------------------------------------------------------------------------
 
-def preview_dotmap(word: str, wordlist: List[str], symbol_set: str = "dot") -> List[str]:
+
+def preview_dotmap(
+    word: str, wordlist: List[str], symbol_set: str = "dot"
+) -> List[str]:
     """
     Return the dotmap columns for a word (no printing).
     """
